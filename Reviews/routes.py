@@ -8,11 +8,11 @@ from datetime import datetime
 REVIEWS_PER_PAGE = 10
 
 # page should start from 0
-@app.route("/reviews/<int:page>", methods = ['GET'])
-def get_reviews(page):
+@app.route("/<string:item_id>/reviews/<int:page>", methods = ['GET'])
+def get_reviews_for_item(item_id, page):
     skip = (page - 1) * REVIEWS_PER_PAGE
     try:
-        Reviews = list(db.Reviews.find({}).sort("date_created", -1).skip(skip).limit(REVIEWS_PER_PAGE))
+        Reviews = list(db.Reviews.find({"item_id": item_id}).sort("date_created", -1).skip(skip).limit(REVIEWS_PER_PAGE))
         for item in Reviews:
             item["_id"] = str(item["_id"])
         response_data = {"Reviews": Reviews}
