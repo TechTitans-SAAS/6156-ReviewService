@@ -87,13 +87,13 @@ def delete_review(review_id):
         return jsonify({'error': str(e)}), 500
 
 
-@app.route("/reviews/<string:review_id>", methods = ['PATCH'])
+@app.route("/reviews/<string:review_id>", methods = ['PUT'])
 def update_review_by_id(review_id):
     review_id_object = ObjectId(review_id)
     try:
         # Retrieve updated data from the request form
         updated_data = {}
-        for key, value in request.form.Reviews():
+        for key, value in request.form.items():
             # Ignore fields with empty values
             if value and key != 'user_id' and key != 'item_id':
                 updated_data[key] = value
