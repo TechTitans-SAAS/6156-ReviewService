@@ -7,7 +7,7 @@ from Reviews import db
 from datetime import datetime
 REVIEWS_PER_PAGE = 10
 
-# page should start from 0
+# page should start from 1
 @app.route("/<string:item_id>/reviews/<int:page>", methods = ['GET'])
 def get_reviews_for_item(item_id, page):
     skip = (page - 1) * REVIEWS_PER_PAGE
