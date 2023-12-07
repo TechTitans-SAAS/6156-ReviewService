@@ -1,10 +1,11 @@
-from Reviews import app, mongodb_client
-from flask import jsonify, make_response, render_template, request, redirect, flash, url_for
-
+from Reviews import app
+from flask import jsonify, make_response, request
+from graphql import graphql
 from bson import ObjectId
 
 from Reviews import db
 from datetime import datetime
+from Reviews.schema import schema
 REVIEWS_PER_PAGE = 10
 
 # page should start from 1
@@ -111,5 +112,15 @@ def update_review_by_id(review_id):
             # Return response indicating no updates were made
             return jsonify({'message': 'No updates made'}), 200
         
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/graphql', methods=['POST'])
+def graphql():
+    try:
+        data = request.get_json()
+        result = schema.execute(data['query'], context_value={'db': db})
+        print(result.data)
+        return jsonify(result.data)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
